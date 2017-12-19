@@ -1,0 +1,82 @@
+<!DOCTYPE>
+<html lang="PT-BR">
+    <head>
+        <meta charset="UTF-8">
+        <title>LTG - Simulador de Escalonador de Processos</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <script type="text/javascript" src="js/LTG.js" charset="UTF-8"></script>
+        <!-- jQuery (obrigatório para plugins JavaScript do Bootstrap) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Inclui todos os plugins compilados (abaixo), ou inclua arquivos separadados se necessário -->
+        <script src="js/bootstrap.min.js"></script>    
+        <script src="js/bootstrap.js"></script>      
+    </head>
+    
+    <body>
+      <div class="jumbotron">
+        <div class="container">  
+        <header>
+            <h1>Sistemas Operacionais</h1>
+
+        </header>
+        
+        <section>
+            <article>
+                <h2>Painel do usuário</h2>
+                <p>Insira os dados para execuçao do escalador</p>
+                <form action="">
+                    <ul>
+                        <li><label for="nProcessadores">Número de processadores:</label></li>
+                        <li><input type="number" name="fnProcessadores" id="fnProcessadores"></li>
+                        <li><label for="nProcessos">Número de processos iniciais:</label></li>
+                        <li><input type="number" name="fnProcessos" id="fnProcessos"></li>
+                        <li>
+                            <input class="btn btn-primary" type="button" value="Iniciar" id="iniciar" onclick="acao()">
+                            <input class="btn btn-danger" type="button" value="Adicionar processo" id="adicionar" onclick="btAdicionarProcessos()" disabled>
+                        </li>
+                    </ul>
+                </form>
+            </article>
+        </section>
+        
+        <div id="tabelaStatus">
+            <!-- Tempo de Execução -->
+            <p>Tempo total em execução:</p>
+            <ul class="campoTempo">
+                <li id="CTempo"></li>
+            </ul>
+            
+            <!-- PROCESSADOR -->
+            <p>Processadores:</p>
+            <div id="nucleo">
+                <div id="Nprocessos"></div>
+            </div>
+            
+            <!-- DeadLine -->
+            <p>Fila de Espera:</p>
+            <div id="deadLine">
+                <div id="NDeadLine"></div>
+            </div>
+            
+            <div id="filas">
+                <div id="Nfilas">
+                    <p>Executado(s):</p>
+                    <ul id="executado"></ul>
+                    <!-- Abortado(s) -->
+                    <p>Abortado(s)</p>
+                    <ul id="filaAbortada"></ul>
+                </div>    
+            </div>             
+            
+        </div>
+        <!-- END TABELA DE STATUS -->
+        <footer>
+            <button type="button" class="glyphicon glyphicon-arrow-left"  onClick="window.location='index.html'" >
+            <span  aria-hidden="true" ></span> Back
+            </button>
+        </footer>
+      </div>
+     </div>   
+    </body>
+</html>

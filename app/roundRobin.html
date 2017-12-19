@@ -1,0 +1,327 @@
+<html ng-app="sistemasOperacionais" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>SO</title>
+    <!-- Scripts -->
+    <script src="lib/js/angular.min.js"></script>
+    <script src="lib/js/angular-route.min.js"></script>
+    <script src="lib/js/jquery.js"></script>
+    <script src="lib/js/bootstrap.js"></script>
+    <script src="lib/js/toastr.min.js"></script>
+    <script src="lib/js/ui-bootstrap-tpls-2.1.3.min.js"></script>
+    <script src="lib/js/highcharts-ng.js"></script>
+    <script src="http://code.highcharts.com/stock/highstock.js"></script>
+
+    <!-- Scripts Customizados -->
+    <script src="js/app.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/roundrobin.js"></script>
+    <script src="js/LeastTimeToGoAlgorithmService.js"></script>
+    <script src="js/bestFit.js"></script>
+    <script src="js/quickFit.js"></script>
+    <script src="js/mergeFit.js"></script>
+    <script src="js/indexController.js"></script>
+    <script src="js/memoryController.js"></script>
+    <script src="js/memorySwapping.js"></script>
+    <script src="js/processController.js"></script>
+    <!-- CSS -->
+    <link rel="stylesheet" href="lib/css/toastr.min.css">
+    <link rel="stylesheet" href="lib/css/bootstrap.min.css">
+
+     <!-- trabalho anterior -->
+            <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <script type="text/javascript" src="js/LTG.js" charset="UTF-8"></script>
+        <!-- jQuery (obrigatório para plugins JavaScript do Bootstrap) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Inclui todos os plugins compilados (abaixo), ou inclua arquivos separadados se necessário -->
+        <script src="js/bootstrap.min.js"></script>    
+        <script src="js/bootstrap.js"></script> 
+
+   <title>Trabalho S.O</title>
+</head>
+<body ng-controller="indexController">
+
+<div class="jumbotron">
+        <div class="container"> 
+
+        <header>
+            <h1>Sistemas Operacionais</h1>
+
+        </header>
+
+</br>
+
+<div class="panel-group">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <p>Painel do usuário</p>
+        </div>
+        <div class="panel-body">
+            
+                <div class="panel-heading"><div class="text-center"><b>Algoritmo Alocação</b></div></br>
+                    <select ng-model="config.algoritmo" ng-disabled="config.running" class="form-control">
+                        <option value="1">Round Robin</option>
+                        
+                    </select>
+                </div>
+            
+
+           
+                <div class="panel-heading"><div class="text-center"><b>Algoritmo Memória</b></div></br>
+                    <select ng-model="config.memoryAlgoritmo" ng-disabled="config.running" class="form-control">
+                        <option value="1">Best Fit</option>
+                        <option value="2">Quick Fit</option>
+                        <option value="3">Merge Fit</option>
+                    </select>
+                </div>
+            
+
+            
+                <div class="panel-heading">
+                    <div class="text-center">
+                        <b>Número de processadores:</b>
+                    </div>
+                    </br>
+                    <input class="form-control" type="number" ng-maxlength="" min="1" max="64" ng-disabled="config.running" ng-model="config.coresNumber">
+                </div>
+            
+
+            
+                <div class="panel-heading">
+                    <div class="text-center">
+                        <b>Nº processos iniciais:</b>
+                    </div>
+                    </br>
+                    <input class="form-control" type="number" min="0" ng-disabled="config.running" ng-model="config.processos">
+                </div>
+           
+
+            
+                <div class="panel-heading"><div class="text-center"><b>Quantum Base</b></div></br>
+                    <input class="form-control" type="number"  min="2" max="20" ng-disabled="config.running" ng-model="config.quantum">
+                </div>
+            
+
+            
+                <div class="panel-heading"><div class="text-center"><b>Memoria Disponivel</b></div></br>
+                    <input class="form-control" type="number"  ng-disabled="config.running" ng-model="config.totalMemory">
+                </div>
+            
+
+            <div class="col-md-12">
+                </br>
+                <input type="submit" value="Iniciar" ng-click="createCores()" class="btn btn-primary">
+                <a class="btn btn-danger" ng-click="parar()">Parar</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- View dos Cores -->
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <p class="panel-title">Processadores</p>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-2" ng-repeat="core in config.cores">
+                <div class="panel panel-default">
+                    <div class="text-center panel-heading">
+                        <b>Processador {{(config.cores.indexOf(core) + 1)}}</b>
+                    </div>
+                    <div class="text-center panel-body">
+                       
+                    </div>
+                    
+                    <div>
+                        ID:  {{core.processo.pid}}
+                    </div>
+                    <div>
+                        Estado: {{core.state}}
+                    </div>
+                    <div>
+                        Tempo Restante:  {{core.tempo}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fim da View Cores -->
+
+
+    <!-- Inicio da View Processos -->
+    <div class="panel panel-default" ng-controller="processController">
+        <div class="panel-heading">
+           <p class="panel-title">Processos</p>
+            <br/>
+            <input type="submit" value="Adicionar Processo" ng-click="addProccess()" ng-show="config.running" class="btn btn-primary">
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped sortable">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Estado</th>
+                    <th ng-show="config.algoritmo == 1">Prioridade</th>
+                    <th ng-show="config.algoritmo == 1">Memoria Solicitada</th>
+                    <th ng-show="config.algoritmo == 2">DeadLine</th>
+                    <th ng-show="config.algoritmo == 2">DeadLineOriginal</th>
+                    <th>Tempo finalizar</th>
+                    
+                </tr>
+                </thead>
+                <tr ng-repeat="process in getProcessos()">
+                    <td>{{process.pid}}</td>
+                    <td>{{process.state}}</td>
+                    <td ng-show="config.algoritmo == 1">{{process.prioridade}}</td>
+                    <td ng-show="config.algoritmo == 1">{{process.memory}}</td>
+                    <td ng-show="config.algoritmo == 2">{{process.deadLine}}</td>
+                    <td ng-show="config.algoritmo == 2">{{process.deadLineOriginal}}</td>
+                    <td>{{process.tempoTotal - process.tempoExecutado}}s</td>
+                    
+                </tr>
+            </table>
+        </div>
+    </div>
+    </br>
+    <!-- View de Memoria-->
+    <div ng-controller = "memoryController" ng-show="config.running">
+        <div class="col-lg-6 col-sm-12">
+            <div class="panel-default">
+             
+                <div class=panel-body>
+                    <highchart class="chart" config="totalMemoryChart" class="span9"></highchart>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+            <div class="panel-default">
+         
+                <div class=panel-body>
+                    <highchart class="chart" config="config.arrayOfProcessMemory" class="span9"></highchart>
+                </div>
+            </div>
+        </div>
+        <div ng-show="config.memoryAlgoritmo == 2">
+            <div class="panel-default col-md-12" ng-show="config.memory.quickBlocks">
+                <div class="panel-heading">Quick Blocks</div>
+                <div class="panel-body">
+                    <div class="col-md-2">
+                        <div class="panel-default">
+                            <div class="panel-heading">Block 1</div>
+                            <div class="panel-body">
+                                <table class="table table-striped sortable">
+                                    <thead>
+                                    <tr>
+                                        <th>Tamanho</th>
+                                        <th>Processo Id</th>
+                                    </tr>
+                                    </thead>
+                                    <tr ng-repeat="block in config.memory.quickBlocks[1].blocks">
+                                        <td>{{block.size}}</td>
+                                        <td>{{block.processo.pid}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="panel-default">
+                            <div class="panel-heading">Block 2</div>
+                            <div class="panel-body">
+                                <table class="table table-striped sortable">
+                                    <thead>
+                                    <tr>
+                                        <th>Tamanho</th>
+                                        <th>Processo Id</th>
+                                    </tr>
+                                    </thead>
+                                    <tr ng-repeat="block in config.memory.quickBlocks[2].blocks">
+                                        <td>{{block.size}}</td>
+                                        <td>{{block.processo.pid}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="panel-default">
+                            <div class="panel-heading">Block 3</div>
+                            <div class="panel-body">
+                                <table class="table table-striped sortable">
+                                    <thead>
+                                    <tr>
+                                        <th>Tamanho</th>
+                                        <th>Processo Id</th>
+                                    </tr>
+                                    </thead>
+                                    <tr ng-repeat="block in config.memory.quickBlocks[3].blocks">
+                                        <td>{{block.size}}</td>
+                                        <td>{{block.processo.pid}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="panel-default">
+                            <div class="panel-heading">Block 4</div>
+                            <div class="panel-body">
+                                <table class="table table-striped sortable">
+                                    <thead>
+                                    <tr>
+                                        <th>Tamanho</th>
+                                        <th>Processo Id</th>
+                                    </tr>
+                                    </thead>
+                                    <tr ng-repeat="block in config.memory.quickBlocks[4].blocks">
+                                        <td>{{block.size}}</td>
+                                        <td>{{block.processo.pid}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="panel-default">
+                            <div class="panel-heading">Block 5</div>
+                            <div class="panel-body">
+                                <table class="table table-striped sortable">
+                                    <thead>
+                                    <tr>
+                                        <th>Tamanho</th>
+                                        <th>Processo Id</th>
+                                    </tr>
+                                    </thead>
+                                    <tr ng-repeat="block in config.memory.quickBlocks[5].blocks">
+                                        <td>{{block.size}}</td>
+                                        <td>{{block.processo.pid}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+</body>
+
+ <footer>
+            <button type="button" class="glyphicon glyphicon-arrow-left"  onClick="window.location='index.html'" >
+            <span  aria-hidden="true" ></span> Back
+            </button>
+        </footer>
+</html>
+

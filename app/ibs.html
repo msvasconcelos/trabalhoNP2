@@ -1,0 +1,91 @@
+<!DOCTYPE>
+<html lang="PT-BR">
+    <head>
+        <meta charset="UTF-8">
+        <title>IBS</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <script type="text/javascript" src="js/IBS.js" charset="UTF-8"></script>
+        <!-- jQuery (obrigatório para plugins JavaScript do Bootstrap) -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Inclui todos os plugins compilados (abaixo), ou inclua arquivos separadados se necessário -->
+        <script src="js/bootstrap.min.js"></script> 
+        <script src="js/bootstrap.js"></script>       
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> 
+    </head>
+    
+    <body>
+      <div class="jumbotron">
+        <div class="container">
+        <header>
+            <h1>Sistemas Operacionais</h1>
+          
+
+        </header>
+        </div>
+        </div>
+        <div class="jumbotron">
+        <div class="container">
+        <section>
+
+            <article>
+
+
+            
+                <h2>Painel do usuário</h2>
+                <p>Insira o intervalo de tempo do processo</p>
+                <form action="">
+                    <ul>
+                        <li><label for="nProcessadores">Tempo inicio:</label></li>
+                        <li><input type="number" name="fnProcessadores" id="fnProcessadores"></li>
+                        <li><label for="nProcessos">Tempo fim:</label></li>
+                        <li><input type="number" name="fnProcessos" id="fnProcessos"></li>
+                        <li>
+                            <input class="btn btn-primary" type="button" value="Iniciar" id="iniciar" onclick="acao()">
+                            <input class="btn btn-danger" type="button" value="Adicionar processo" id="adicionar" onclick="btAdicionarProcessos()" disabled>
+                        </li>
+                    </ul>
+                </form>   
+            </article>
+        </section>
+        
+
+<div id="timeline" style="height: 380px;">
+    <script>
+      google.charts.load('current', {'packages':['timeline']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var container = document.getElementById('timeline');
+        var chart = new google.visualization.Timeline(container);
+        var dataTable = new google.visualization.DataTable();
+
+        dataTable.addColumn({ type: 'string', id: 'President' });
+        dataTable.addColumn({ type: 'date', id: 'Start' });
+        dataTable.addColumn({ type: 'date', id: 'End' });
+        dataTable.addRows([
+          [ 'Processo1',      new Date(3, 3, 30), new Date(5, 2, 4) ],
+          [ 'Processo2',      new Date(0, 2, 4),  new Date(1, 2, 4) ],
+          [ 'Processo3',      new Date(1, 2, 4),  new Date(2, 2, 4) ],
+          [ 'Processo4',      new Date(2, 2, 4),  new Date(3, 2, 4) ],
+          [ 'Processo5',      new Date(2, 2, 4),  new Date(5, 2, 4) ]]);
+
+        chart.draw(dataTable);
+      }
+    </script>
+
+</div>
+        </div>
+        </div> 
+        
+       
+        <!-- END TABELA DE STATUS -->
+        <footer>
+            <button type="button" class="glyphicon glyphicon-arrow-left"  onClick="window.location='index.html'" >
+            <span  aria-hidden="true" ></span> Back
+            </button>
+            
+        </footer>
+      </div>
+        </div>    
+    </body>
+</html>
